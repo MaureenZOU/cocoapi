@@ -76,6 +76,7 @@ class COCOeval:
         self._paramsEval = {}               # parameters for evaluation
         self.stats = []                     # result summarization
         self.ious = {}                      # ious between all gts and dts
+        self.summarize_str = ''             # summary string for iou metric
         if not cocoGt is None:
             self.params.imgIds = sorted(cocoGt.getImgIds())
             self.params.catIds = sorted(cocoGt.getCatIds())
@@ -453,8 +454,12 @@ class COCOeval:
                 mean_s = -1
             else:
                 mean_s = np.mean(s[s>-1])
-            print(iStr.format(titleStr, typeStr, iouStr, areaRng, maxDets, mean_s))
+
+            display_string = iStr.format(titleStr, typeStr, iouStr, areaRng, maxDets, mean_s)
+            print(display_string)
+            self.summarize_str += display_string + '\n'
             return mean_s
+
         def _summarizeDets():
             stats = np.zeros((12,))
             stats[0] = _summarize(1)
